@@ -3,6 +3,8 @@
 using namespace std;
 
 #define strdoub string, double
+#define ss second
+#define ff first
 
 int n, m, x;
 bool f = 0;
@@ -75,7 +77,7 @@ void fixTable(int r, int c){
 }
 
 //function to maximize
-int maxZ(int num){
+double maxZ(int num){
     printTable(num);
     double pivCol = getPivCol();
     if(simplex[m][pivCol] < 0){
@@ -86,15 +88,14 @@ int maxZ(int num){
         return maxZ(num + 1);
     }
     else{
-        double ans = 0;
-        return ans;
+        return simplex.back().back();
     }
 }
 
-//Funcion to minimize
-int minZ(int num){
-    cout<<"Minimize"<<endl;
-    getPivCol();
+//function to minimize
+double minZ(int num){
+
+    return 1;
 }
 
 void build(){
@@ -135,6 +136,19 @@ void build(){
     }
 }
 
+void printSolution(double ans){
+    for(int i = 0; i < m; i++){
+        if(mp.find(pm[i]) != mp.end()){
+            values[pm[i]] = simplex[i].back();
+        }
+    }
+    for(auto it: values){
+        cout<<it.ff<<" = "<<it.ss<<endl;
+    }
+    cout<<"Z = "<<ans<<endl;
+    return;
+}
+
 void getInput(){
     int x;
     double v;
@@ -155,12 +169,12 @@ void getInput(){
         cin>>c[i];
         cout<<curr<<endl;
         mp[curr] = i - 1;
+        values[curr] = 0;
         cm[i - 1] = curr;
     }
     cout<<"Numero de restricciones: ";
     cin>>m;
     string rest;
-    int s = 1;
     cin.ignore();
     for(int i = 0; i < m; i++){
         getline(cin, rest);
@@ -176,7 +190,8 @@ int main(){
 
     getInput();
     build();
-    f ? minZ(1) : maxZ(1);
+    double ans = maxZ(1);
+    printSolution(ans);
     return 0;
 }
 /*
